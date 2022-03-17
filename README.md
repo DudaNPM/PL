@@ -1,2 +1,2 @@
 # PL
-Processamento de Linguagens 2022
+UC Processamento de Linguagens 2022
