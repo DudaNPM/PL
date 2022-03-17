@@ -1,6 +1,6 @@
 import re
-from typing import List
 import sys
+from unittest import result
 
 
 ### Exemplo de ficheiros csv e o seu resultado em json
@@ -90,9 +90,19 @@ def cabecalho(cabecalho):
     return colunas
 
 
-
-def funcao_agregacao(coluna,valores,funcao):
-    return
+### Recebe uma lista de valores e uma função de agregação
+### Devolve o resultado de aplicar a função à lista
+def funcao(valores, funcao):
+    if funcao == 'avg':
+        return round(sum(valores) / len(valores), 2)    # arredonda a 2 casas decimais
+    elif funcao == "sum":
+        return sum(valores)
+    elif funcao == 'min':
+        return min(valores)
+    elif funcao == 'max':
+        return max(valores)
+    else:
+        raise Exception("Função de agregação - " + funcao + " - desconhecida...")
 
 
 
@@ -100,7 +110,6 @@ def funcao_agregacao(coluna,valores,funcao):
 ### Percorre todas as linhas e constrói uma string de acordo com um ficheiro json
 ### Retorna a string construída
 def csv2json(colunas,lines):
-
     json_txt = []
 
     json_txt.append("[")
@@ -110,11 +119,26 @@ def csv2json(colunas,lines):
 
         # colunas
         campos = line.split(',')    # estou a assumir que o separador de campos é a vírgula
+        print(campos)
 
         # percorremos todas as colunas de cada linha
         for j, campo in enumerate(campos):
+            print(colunas[j])
             if campo:   # ignora campos vazios
-                json_txt.append(f'\t\t"{colunas[j]}": "{campo}"' + ("," if (len(list(filter(None,campos[j:]))) > 1) else ""))   # condição que verifica se é o campo da última coluna, se não for não leva vírgula
+                ### neste ponto, verificar se a coluna j é uma lista de valores e se tem função de agregação ou não
+                ### para isso ao ler o cabeçalho vai ter que se guardar num tuplo (?) qql coisa como (titulo,min,max,funcao) -> (nome,0,0,"") | (notas,3,5,"sum") | (notas,5,5,avg)
+                # if coluna[j] not lista:
+                json_txt.append(f'\t\t"{colunas[j]}": "{campo}"' + ("," if (len(list(filter(None,campos[j:]))) > 1) else ""))   # condição que verifica se é o campo da última coluna, se for não leva vírgula
+                # else:
+                #   valores = re.findall(r'...', ','.join(campos[j:]))
+                #   
+                #   if coluna[j] not função_agregação:
+                #       append colunas[j] + os valores numa lista
+                #   else:
+                #       resultado = funcao(valores,funcao)
+                #       append colunas[j] + resultado
+                #   
+                #   incrementar o j de acordo com o numero de valores encontrados
 
         # condição que verifiva se é a última linha, se for não leva vírgula
         if (i != len(lines)-1):
@@ -123,7 +147,7 @@ def csv2json(colunas,lines):
             json_txt.append("\t}")
     
     json_txt.append("]")
-    return '\n'.join(json_txt)
+    return '\n'.join(json_txt)  # junta todas as strings da lista, metendo um \n entre elas
 
 
 
@@ -133,7 +157,6 @@ if len(sys.argv) == 3:
 	json = f"{sys.argv[2]}"     # output
 else:
 	raise Exception("Número de argumentos inválido...\n")
-
 
 # Ler CSV
 file = open(csv)
