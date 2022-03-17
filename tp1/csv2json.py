@@ -1,6 +1,5 @@
 import re
 import sys
-from unittest import result
 
 
 ### Exemplo de ficheiros csv e o seu resultado em json
