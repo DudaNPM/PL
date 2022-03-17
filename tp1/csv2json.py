@@ -129,8 +129,8 @@ def csv2json(colunas,lines):
 
 # Leitura dos argumentos
 if len(sys.argv) == 3:
-	csv = f"{sys.argv[1]}"
-	json = f"{sys.argv[2]}"
+	csv = f"{sys.argv[1]}"      # input
+	json = f"{sys.argv[2]}"     # output
 else:
 	raise Exception("Número de argumentos inválido...\n")
 
