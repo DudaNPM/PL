@@ -1,0 +1,50 @@
+[
+	{
+		"Número": "3162",
+		"Nome": "Cândido Faísca",
+		"Curso": "Teatro",
+		"Notas": [12, 13, 14, 15, 16]
+	},
+	{
+		"Número": "7777",
+		"Nome": "Cristiano Ronaldo",
+		"Curso": "Desporto",
+		"Notas": [17, 12, 20, 11, 12]
+	},
+	{
+		"Número": "264",
+		"Nome": "Marcelo Sousa",
+		"Curso": "Ciência Política",
+		"Notas": [18, 19, 19, 20, 18]
+	},
+	{
+		"Número": "9234",
+		"Nome": "Ricardo Gama",
+		"Curso": "Informática",
+		"Notas": [13, 14, 10, 11, 17]
+	},
+	{
+		"Número": "3493",
+		"Nome": "Duarte Moreira",
+		"Curso": "Informática",
+		"Notas": [17, 16, 15, 12, 11]
+	},
+	{
+		"Número": "239",
+		"Nome": "Lucas Carvalho",
+		"Curso": "Informática",
+		"Notas": [18, 10, 12, 14, 11]
+	},
+	{
+		"Número": "9235",
+		"Nome": "Daniela Silva",
+		"Curso": "Biologia",
+		"Notas": [10, 12, 15, 13, 12]
+	},
+	{
+		"Número": "87344",
+		"Nome": "Ana Filipa",
+		"Curso": "Gestão",
+		"Notas": [10, 15, 16, 19, 14]
+	}
+]

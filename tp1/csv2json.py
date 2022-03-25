@@ -135,28 +135,26 @@ def csv2json(colunas,lines):
             json_txt.append("\t}")
     
     json_txt.append("]")
-    return '\n'.join(json_txt)  # junta todas as strings da lista, metendo um \n entre elas
+    
+    return '\n'.join(json_txt)     # junta todas as strings da lista, metendo um \n entre elas
 
 
 
 # Leitura dos argumentos
 if len(sys.argv) == 3:
-	csv = f"{sys.argv[1]}"      # input
-	json = f"{sys.argv[2]}"     # output
+	csv = f"./database/{sys.argv[1]}"      # input
+	json = f"./database/{sys.argv[2]}"     # output
 else:
 	raise Exception("Número de argumentos inválido...\n")
 
 # Ler CSV
 file = open(csv, encoding="utf8")
-lines = file.read().splitlines()  # remove os \n
+linhas = file.read().splitlines()  # remove os \n
 file.close()
 
-if len(lines) < 2:
-	raise Exception("Ficheiro mal configurado...\n")
-
 # Trabalhar CSV e preparar JSON
-colunas = cabecalho(lines[0])
-json_txt = csv2json(colunas,lines[1:])
+colunas = cabecalho(linhas[0])
+json_txt = csv2json(colunas,linhas[1:])
 
 # Criar JSON
 json_file = open(json, "w")
