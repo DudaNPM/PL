@@ -2,6 +2,10 @@ import ply.yacc as yacc
 from grammarTP2 import tokens
 import ply.lex as lex
 
+# ideias: contar nº de jogadores do plantel
+#         contar quantos jogadores cada posição tem
+#         contar quantas posições cada jogador pode fazer
+
 # def p_grammar(p):
 #     Z         : Plantel '$'
 #     Plantel   : '[' Jogadores ']'
