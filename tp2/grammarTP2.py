@@ -1,6 +1,6 @@
 import ply.lex as lex
 
-tokens = ['PA','PF','VIRG','ID','GK','LAT','CEN','MED','EXT','PL']
+tokens = ['PA','PF','VIRG','ID','GK','LAT','CEN','MED','EXT','PL','NOME','POSICOES']
 
 t_ID   = r'[A-Za-z]'
 t_PA   = r'\['
@@ -11,6 +11,8 @@ t_CEN  = r'CEN'
 t_MED  = r'MED'
 t_EXT  = r'EXT'
 t_PL   = r'PL'
+t_NOME = r'Nome:'
+t_POSICOES = r'Posicoes:'
  
 t_ignore = " \t"
 
