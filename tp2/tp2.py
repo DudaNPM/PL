@@ -1,6 +1,31 @@
 import ply.yacc as yacc
-from grammarTP2 import tokens
 import ply.lex as lex
+
+tokens = ['PA','PF','VIRG','ID','GK','LAT','CEN','MED','EXT','PL','NOME','POSICOES']
+
+t_ID   = r'[A-Za-z]+'
+t_PA   = r'\['
+t_PF   = r'\]'
+t_VIRG = r','
+t_GK   = r'GK'
+t_CEN  = r'CEN'
+t_MED  = r'MED'
+t_EXT  = r'EXT'
+t_PL   = r'PL'
+t_NOME = r'Nome\:'
+t_POSICOES = r'Posicoes\:'
+ 
+t_ignore = " \t"
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+def t_error(t):
+    print('Caráter ilegal: ', t.value[0])
+    t.lexer.skip(1)
+
+lexer = lex.lex()
 
 # ideias: contar nº de jogadores do plantel
 #         contar quantos jogadores cada posição tem
@@ -30,17 +55,16 @@ import ply.lex as lex
 # LA(p9) = {']'}
 # LA(p10) = {GK | LAT | CEN | MED | EXT | PL}
 
-# [Nome: Ricardo Posições: [MED,EXT], Nome: Miguel Posições: [EXT,PL], Nome: Filipe Posições: [PL]]
+# [Nome: Ricardo Posicoes: [MED,EXT], Nome: Miguel Posicoes: [EXT,PL], Nome: Filipe Posicoes: [PL]]
 
 prox_simb = ('Erro', '', 0, 0)
-
-lexer = lex.lex()
 
 def parserErro(simb):
     print("Erro: ", simb)
 
 def rec_term(simb):
     global prox_simb
+    print("term:",prox_simb.value)
     if prox_simb.type == simb:
         prox_simb = lex.token()
     else: parserErro(prox_simb)
@@ -50,6 +74,7 @@ def rec_Parser(data):
     lexer.input(data)
     prox_simb = lexer.token()
     rec_Plantel()
+    print("Acabei")
 
 def rec_Plantel():
     rec_term('PA') 
@@ -62,12 +87,11 @@ def rec_Jogadores():
 
 def rec_Cont1():
     global prox_simb
-    if prox_simb.type == 'VIRG':
-        rec_term('VIRG')
-        rec_Jogador()
-        rec_Cont1()
-    elif prox_simb.type == 'PF':
-        pass
+    if prox_simb:
+        if prox_simb.type == 'VIRG':
+            rec_term('VIRG')
+            rec_Jogador()
+            rec_Cont1()
     else: parserErro(prox_simb)
 
 def rec_Jogador():
@@ -87,11 +111,10 @@ def rec_Posicoes():
 
 def rec_Cont2():
     global prox_simb
-    if prox_simb.type == 'VIRG':
-        rec_Posicao()
-        rec_Cont2()
-    elif prox_simb.type == 'PF':
-        pass
+    if prox_simb:
+        if prox_simb.type == 'VIRG':
+            rec_Posicao()
+            rec_Cont2()
     else: parserErro(prox_simb)
 
 def rec_Posicao():
@@ -110,4 +133,6 @@ def rec_Posicao():
         rec_term('PL')
     else: parserErro(prox_simb)
 
-parser = yacc.yacc()
+linha = input("Introduza uma frase válida: ")
+
+rec_Parser(linha)
