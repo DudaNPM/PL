@@ -17,6 +17,12 @@ t_POSICOES = r'Posicoes\:'
  
 t_ignore = " \t"
 
+#def t_NOME(t):
+#    r'Nome\: '
+
+#def t_POSICOES(t):
+#    r'Posicoes\:'
+
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
