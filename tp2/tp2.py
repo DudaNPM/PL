@@ -7,22 +7,48 @@ t_PA   = r'\['
 t_PF   = r'\]'
 t_VIRG = r','
 t_ID   = r'[A-Za-z]+'
-t_GK   = r'GK'
-t_LAT  = r'LAT'
-t_CEN  = r'CEN'
-t_MED  = r'MED'
-t_EXT  = r'EXT'
-t_PL   = r'PL'
-t_NOME = r'Nome\:'
-t_POSICOES = r'Posicoes\:'
+#t_GK   = r'GK'
+#t_LAT  = r'LAT'
+#t_CEN  = r'CEN'
+#t_MED  = r'MED'
+#t_EXT  = r'EXT'
+#t_PL   = r'PL'
+#t_NOME = r'Nome\:'
+#t_POSICOES = r'Posicoes\:'
  
 t_ignore = ' \t'
 
-#def t_NOME(t):
-#    r'Nome\: '
+def t_NOME(t):
+    r'Nome\: '
+    return t
 
-#def t_POSICOES(t):
-#    r'Posicoes\:'
+def t_POSICOES(t):
+    r'Posicoes\:'
+    return t
+
+def t_GK(t):
+    r'GK'
+    return t
+
+def t_LAT(t):
+    r'LAT'
+    return t
+
+def t_CEN(t):
+    r'CEN'
+    return t
+
+def t_MED(t):
+    r'MED'
+    return t
+
+def t_EXT(t):
+    r'EXT'
+    return t
+    
+def t_PL(t):
+    r'PL'
+    return t   
 
 def t_newline(t):
     r'\n+'
