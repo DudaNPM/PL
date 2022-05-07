@@ -64,6 +64,12 @@ lexer = lex.lex()
 #         contar quantos jogadores cada posição tem
 #         contar quantas posições cada jogador pode fazer
             
+# G = {T,N,P,S}
+# T = {'[', ']', ',', 'Nome:', 'Posicoes:', 'id', 'GK', 'LAT', 'CEN', 'MED', 'EXT', 'PL'}
+# N = {Plantel, Jogadores, Jogador, Cont1, Nome, Posicoes, Posicao, Cont2}
+# S = Plantel
+# P = {p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16}
+
 # def p_grammar(p):
 #  p1    Z         : Plantel '$'
 #  p2    Plantel   : '[' Jogadores ']'
