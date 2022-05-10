@@ -34,6 +34,9 @@ NT = ['Plantel', 'Jogadores', 'Cont1', 'Jogador', 'Nome', 'Posicoes', 'Cont2', '
 # Símbolos terminais
 T = ['PA', 'PF', 'VIRG', 'Nome:', 'Posicoes:', 'id', 'GK', 'LAT', 'CEN', 'MED', 'EXT', 'PL']
 
+# Acho que está bem, falta verificar quando o proximo simbolo não é NT voltar a fazer o ciclo mas agora com p[1]
+# E falta fazer para as produções que são vazias
+
 # Cálculo de LookAheads
 lookAheads = {}
 for n in NT:
@@ -52,4 +55,3 @@ for n in NT:
 
 print(lookAheads)
 
-# isto ta mal...mas ja faz alguma coisa :D

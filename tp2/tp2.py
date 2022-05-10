@@ -1,3 +1,5 @@
+from traceback import print_tb
+from turtle import pos
 import ply.lex as lex
 
 tokens = ['PA','PF','VIRG','ID','GK','LAT','CEN','MED','EXT','PL','NOME','POSICOES']
@@ -6,14 +8,6 @@ t_PA   = r'\['
 t_PF   = r'\]'
 t_VIRG = r','
 t_ID   = r'[A-Za-z]+'
-#t_GK   = r'GK'
-#t_LAT  = r'LAT'
-#t_CEN  = r'CEN'
-#t_MED  = r'MED'
-#t_EXT  = r'EXT'
-#t_PL   = r'PL'
-#t_NOME = r'Nome\:'
-#t_POSICOES = r'Posicoes\:'
 
 def t_NOME(t):
     r'Nome\:'
@@ -71,9 +65,10 @@ lexer = lex.lex()
 
 
 
-# ideias: contar nº de jogadores do plantel
+# ideias: contar nº de jogadores do plantel                     (Feito)
 #         contar quantos jogadores cada posição tem
 #         contar quantas posições cada jogador pode fazer
+#         contar para quantas posicoes o plantel tem jogadores  (Feito)
             
 # G = {T,N,P,S}
 # T = {'[', ']', ',', 'Nome:', 'Posicoes:', 'id', 'GK', 'LAT', 'CEN', 'MED', 'EXT', 'PL'}
@@ -149,10 +144,10 @@ def rec_Jogadores():
 def rec_Cont1():
     global prox_simb
     if prox_simb.type == 'VIRG':
-            rec_term('VIRG')
-            rec_Jogador()
-            rec_Cont1()
-            # print("Reconheci p4: Cont1 -> ',' Jogador Cont1")
+        rec_term('VIRG')
+        rec_Jogador()
+        rec_Cont1()
+        # print("Reconheci p4: Cont1 -> ',' Jogador Cont1")
     elif prox_simb.type == 'PF':
         # print("Reconheci p5: Cont1 -> ")
         pass
@@ -169,7 +164,9 @@ def rec_Jogador():
     # print("Reconheci p6: Jogador -> 'Nome: ' Nome 'Posicoes: ' '[' Posicoes ']'")
 
 def rec_Nome():
+    global nrJogadores
     rec_term('ID')
+    nrJogadores += 1
     # print("Reconheci p7: Nome -> id")
 
 def rec_Posicoes():
@@ -189,37 +186,71 @@ def rec_Cont2():
         pass
     else: parserError(prox_simb)
 
+posicoes = []
+#todasPosicoes = []
+
 def rec_Posicao():
     global prox_simb
+    global posicoesPreenchidas
     if prox_simb.type == 'GK':
         rec_term('GK')
+        if "GK" not in posicoes:
+            posicoes.append("GK")
+            posicoesPreenchidas += 1
         # print("Reconheci p11: Posicao -> GK")
     elif prox_simb.type == 'LAT':
-        rec_term('LAT')
+        rec_term('LAT') 
+        if "LAT" not in posicoes:
+            posicoes.append("LAT")
+            posicoesPreenchidas += 1
         # print("Reconheci p12: Posicao -> LAT")
     elif prox_simb.type == 'CEN':
         rec_term('CEN')
+        if "CEN" not in posicoes:
+            posicoes.append("CEN")
+            posicoesPreenchidas += 1
         # print("Reconheci p13: Posicao -> CEN")
     elif prox_simb.type == 'MED':
         rec_term('MED')
+        if "MED" not in posicoes:
+            posicoes.append("MED")
+            posicoesPreenchidas += 1
         # print("Reconheci p14: Posicao -> MED")
     elif prox_simb.type == 'EXT':
-        rec_term('EXT')
+        rec_term('EXT')        
+        if "EXT" not in posicoes:
+            posicoes.append("EXT")
+            posicoesPreenchidas += 1
         # print("Reconheci p15: Posicao -> EXT")
     elif prox_simb.type == 'PL':
         rec_term('PL')
+        if "PL" not in posicoes:
+            posicoes.append("PL")
+            posicoesPreenchidas += 1
         # print("Reconheci p16: Posicao -> PL")
     else: parserError(prox_simb)
 
-#linha = input("Introduza uma frase válida: ")
+    #posicoesCadaJogador = len(posicoes)
+    #print("O jogador pode atuar em",posicoesCadaJogador,"posicoes")
+
+
+nrJogadores = 0
+posicoesPreenchidas = 0
+posicoesCadaJogador = 0
+jogadoresPorPosicao = 0
+
+linha = input("Introduza uma frase válida: ")
 # Teste do tokenizer
 # lexer.input(linha)
 # for tok in lexer:
 #     print(tok)
-#rec_Parser(linha)
+rec_Parser(linha)
+print("Este plantel é constituído por", nrJogadores, "jogadores")
+print("Este plantel tem jogadores que podem atuar em", posicoesPreenchidas, "posicoes diferentes")
 
-import sys
-programa = sys.stdin.read()
-rec_Parser(programa)
+
+#import sys
+#programa = sys.stdin.read()
+#rec_Parser(programa)
 
 ## usar comando: cat teste.txt | python3 tp2.py
