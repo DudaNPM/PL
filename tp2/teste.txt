@@ -1,0 +1,4 @@
+[Nome: Ricardo Posicoes: [MED,EXT], Nome: Miguel Posicoes: [EXT,PL], Nome: Filipe Posicoes: [PL],
+ Nome: Duarte Posicoes: [PL,EXT], Nome: Lucas Posicoes: [MED,CEN,PL], Nome: Manuel Posicoes: [GK],
+ Nome: Agostinho Posicoes: [EXT,PL], Nome: Alves Posicoes: [CEN], Nome: Costa Posicoes: [MED,EXT,CEN],
+ Nome: Marques Posicoes: [GK], Nome: Paulinho Posicoes: [MED,LAT], Nome: Pires Posicoes: [LAT,EXT]]
