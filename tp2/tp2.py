@@ -114,8 +114,8 @@ lexer = lex.lex()
 
 prox_simb = ('Erro', '', 0, 0)
 
-def parserError(simb,i):
-    print("Erro Sintático: ", simb, i)
+def parserError(simb):
+    print("Erro Sintático: ", simb)
 
 def rec_term(simb):
     global prox_simb
@@ -124,7 +124,7 @@ def rec_term(simb):
         v_term = prox_simb.value
         prox_simb = lexer.token()
     else:
-        parserError(prox_simb,1)
+        parserError(prox_simb)
         v_term = 'Erro Léxico'
     return v_term
 
@@ -157,7 +157,7 @@ def rec_Cont1():
         # print("Reconheci p5: Cont1 -> ")
         pass
     else:
-        parserError(prox_simb,2)
+        parserError(prox_simb)
 
 def rec_Jogador():
     rec_term('NOME')
@@ -187,7 +187,7 @@ def rec_Cont2():
     elif prox_simb.type == 'PF':
         # print("Reconheci p10: Cont2 -> ")
         pass
-    else: parserError(prox_simb,3)
+    else: parserError(prox_simb)
 
 def rec_Posicao():
     global prox_simb
@@ -209,7 +209,7 @@ def rec_Posicao():
     elif prox_simb.type == 'PL':
         rec_term('PL')
         # print("Reconheci p16: Posicao -> PL")
-    else: parserError(prox_simb,4)
+    else: parserError(prox_simb)
 
 #linha = input("Introduza uma frase válida: ")
 # Teste do tokenizer
