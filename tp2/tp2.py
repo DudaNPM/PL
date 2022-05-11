@@ -1,5 +1,5 @@
 from traceback import print_tb
-from turtle import pos
+#from turtle import pos
 import ply.lex as lex
 
 tokens = ['PA','PF','VIRG','ID','GK','LAT','CEN','MED','EXT','PL','NOME','POSICOES']
@@ -69,43 +69,49 @@ lexer = lex.lex()
 #         contar quantos jogadores cada posição tem
 #         contar quantas posições cada jogador pode fazer
 #         contar para quantas posicoes o plantel tem jogadores  (Feito)
-            
+
+
 # G = {T,N,P,S}
 # T = {'[', ']', ',', 'Nome:', 'Posicoes:', 'id', 'GK', 'LAT', 'CEN', 'MED', 'EXT', 'PL'}
 # N = {Plantel, Jogadores, Jogador, Cont1, Nome, Posicoes, Posicao, Cont2}
 # S = Plantel
 # P = {p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16}
 
-# def p_grammar(p):                                                 LOOKAHEADS
-#  p1    Z         : Plantel '$'                                        {'['}
-#  p2    Plantel   : '[' Jogadores ']'                                  {'['}
-#  p3    Jogadores : Jogador Cont1                                      {"Nome: "}
-#  p4    Cont1     : ',' Jogador Cont1                                  {','}
-#  p5              | ϵ                                                  {']'}
-#  p6    Jogador   : "Nome: " Nome "Posicoes: " '[' Posicoes ']'        {"Nome: "}
-#  p7    Nome      : id                                                 {id}
-#  p8    Posicoes  : Posicao Cont2                                      {GK,LAT,CEN,MED,EXT,PL}
-#  p9    Cont2     : ',' Posicao Cont2                                  {','}
-# p10              | ϵ                                                  {']'}
-# p11    Posicao   : GK                                                 {GK}
-# p12              | LAT                                                {LAT}
-# p13              | CEN                                                {CEN}
-# p14              | MED                                                {MED}
-# p15              | EXT                                                {EXT}
-# p16              | PL                                                 {PL}
 
-#    estado     '['     "Nome: "     ','     ']'     id     GK     LAT     CEN     MED     EXT     PL
-# -------------------------------------------------------------------------------------------------------
-#         Z      p1                                                                                      
-#   Plantel      p2                                                                                      
-# Jogadores               p3                                                                             
-#     Cont1                          p4      p5                                                          
-#   Jogador               p6                                                                             
-#      Nome                                          p7                                                  
-#  Posicoes                                                 p9     p9      p9      p9      p9      p9   
-#     Cont2                          p9      p10                                                         
-#   Posicao                                                 p11    p12     p13     p14     p15     p16   
-# -------------------------------------------------------------------------------------------------------
+# def p_grammar(p):                                                 FIRST                           FOLLOW          LOOKAHEADS
+#  p1    Z         : Plantel '$'                                    {'['}                           {}              {'['}
+#  p2    Plantel   : '[' Jogadores ']'                              {'['}                           {$}             {'['}
+#  p3    Jogadores : Jogador Cont1                                  {"Nome: "}                      {']'}           {"Nome: "}
+#  p4    Cont1     : ',' Jogador Cont1                              {','}                           {']'}           {','}
+#  p5              | ϵ                                              {}                              {}              {']'}
+#  p6    Jogador   : "Nome: " Nome "Posicoes: " '[' Posicoes ']'    {"Nome: "}                      {']',','}       {"Nome: "}
+#  p7    Nome      : id                                             {id}                            {"Posicoes:"}   {id}
+#  p8    Posicoes  : Posicao Cont2                                  {GK,LAT,CEN,MED,EXT,PL}         {']'}           {GK,LAT,CEN,MED,EXT,PL}
+#  p9    Cont2     : ',' Posicao Cont2                              {','}                           {']'}           {','}
+# p10              | ϵ                                              {}                              {}              {']'}
+# p11    Posicao   : GK                                             {GK}                            {']',','}       {GK}
+# p12              | LAT                                            {LAT}                           {}              {LAT}
+# p13              | CEN                                            {CEN}                           {}              {CEN}
+# p14              | MED                                            {MED}                           {}              {MED}
+# p15              | EXT                                            {EXT}                           {}              {EXT}
+# p16              | PL                                             {PL}                            {}              {PL}
+
+
+# Transition Table
+
+#    estado     '['     "Nome: "     ','     ']'     id     GK     LAT     CEN     MED     EXT     PL    "Posicoes:"
+# --------------------------------------------------------------------------------------------------------------------
+#         Z      p1       --         --      --      --     --     --      --      --      --      -- 
+#   Plantel      p2       --         --      --      --     --     --      --      --      --      -- 
+# Jogadores      --       p3         --      --      --     --     --      --      --      --      -- 
+#     Cont1      --       --         p4      p5      --     --     --      --      --      --      -- 
+#   Jogador      --       p6         --      --      --     --     --      --      --      --      -- 
+#      Nome      --       --         --      --      p7     --     --      --      --      --      -- 
+#  Posicoes      --       --         --      --      --     p8     p8      p8      p8      p8      p8 
+#     Cont2      --       --         p9      p10     --     --     --      --      --      --      -- 
+#   Posicao      --       --         --      --      --     p11    p12     p13     p14     p15     p16
+# --------------------------------------------------------------------------------------------------------------------
+
 
 prox_simb = ('Erro', '', 0, 0)
 
