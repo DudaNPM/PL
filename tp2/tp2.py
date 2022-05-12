@@ -62,15 +62,6 @@ lexer = lex.lex()
 
 #####################################################################################################################
 
-
-
-
-# ideias: contar nº de jogadores do plantel                     (Feito)
-#         contar quantos jogadores cada posição tem
-#         contar quantas posições cada jogador pode fazer
-#         contar para quantas posicoes o plantel tem jogadores  (Feito)
-
-
 # G = {T,N,P,S}
 # T = {'[', ']', ',', 'Nome:', 'Posicoes:', 'id', 'GK', 'LAT', 'CEN', 'MED', 'EXT', 'PL'}
 # N = {Plantel, Jogadores, Jogador, Cont1, Nome, Posicoes, Posicao, Cont2}
@@ -140,12 +131,10 @@ def rec_Plantel():
     rec_term('PA') 
     rec_Jogadores()
     rec_term('PF')
-    # print("Reconheci p2: Plantel -> '[' Jogadores ']'")
     
 def rec_Jogadores():
     rec_Jogador()
     rec_Cont1()
-    # print("Reconheci p3: Jogadores -> Jogador Cont1")
 
 def rec_Cont1():
     global prox_simb
@@ -153,32 +142,30 @@ def rec_Cont1():
         rec_term('VIRG')
         rec_Jogador()
         rec_Cont1()
-        # print("Reconheci p4: Cont1 -> ',' Jogador Cont1")
     elif prox_simb.type == 'PF':
-        # print("Reconheci p5: Cont1 -> ")
         pass
     else:
         parserError(prox_simb)
 
 def rec_Jogador():
+    global posicoesCadaJogador
     rec_term('NOME')
     rec_Nome()
     rec_term('POSICOES')
     rec_term('PA')
     rec_Posicoes()
     rec_term('PF')
-    # print("Reconheci p6: Jogador -> 'Nome: ' Nome 'Posicoes: ' '[' Posicoes ']'")
+    print("Este jogador é capaz de jogar em",posicoesCadaJogador,"posicoes diferentes")
+    posicoesCadaJogador = 0
 
 def rec_Nome():
     global nrJogadores
     rec_term('ID')
     nrJogadores += 1
-    # print("Reconheci p7: Nome -> id")
 
 def rec_Posicoes():
     rec_Posicao()
     rec_Cont2()
-    # print("Reconheci p8: Posicoes -> Posicao Cont2")
 
 def rec_Cont2():
     global prox_simb
@@ -186,64 +173,76 @@ def rec_Cont2():
         rec_term('VIRG')
         rec_Posicao()
         rec_Cont2()
-        # print("Reconheci p9: Cont2 -> ',' Posicao Cont2")
     elif prox_simb.type == 'PF':
-        # print("Reconheci p10: Cont2 -> ")
         pass
     else: parserError(prox_simb)
 
 posicoes = []
-#todasPosicoes = []
 
 def rec_Posicao():
     global prox_simb
+    global posicoesCadaJogador
+    global gks
+    global lats
+    global cens
+    global meds
+    global exts
+    global pls
     global posicoesPreenchidas
     if prox_simb.type == 'GK':
         rec_term('GK')
         if "GK" not in posicoes:
             posicoes.append("GK")
             posicoesPreenchidas += 1
-        # print("Reconheci p11: Posicao -> GK")
+        gks += 1
+        posicoesCadaJogador += 1
     elif prox_simb.type == 'LAT':
         rec_term('LAT') 
         if "LAT" not in posicoes:
             posicoes.append("LAT")
             posicoesPreenchidas += 1
-        # print("Reconheci p12: Posicao -> LAT")
+        lats += 1
+        posicoesCadaJogador += 1
     elif prox_simb.type == 'CEN':
         rec_term('CEN')
         if "CEN" not in posicoes:
             posicoes.append("CEN")
             posicoesPreenchidas += 1
-        # print("Reconheci p13: Posicao -> CEN")
+        cens += 1
+        posicoesCadaJogador += 1
     elif prox_simb.type == 'MED':
         rec_term('MED')
         if "MED" not in posicoes:
             posicoes.append("MED")
             posicoesPreenchidas += 1
-        # print("Reconheci p14: Posicao -> MED")
+        meds += 1
+        posicoesCadaJogador += 1
     elif prox_simb.type == 'EXT':
         rec_term('EXT')        
         if "EXT" not in posicoes:
             posicoes.append("EXT")
             posicoesPreenchidas += 1
-        # print("Reconheci p15: Posicao -> EXT")
+        exts += 1
+        posicoesCadaJogador += 1
     elif prox_simb.type == 'PL':
         rec_term('PL')
         if "PL" not in posicoes:
             posicoes.append("PL")
             posicoesPreenchidas += 1
-        # print("Reconheci p16: Posicao -> PL")
+        pls += 1
+        posicoesCadaJogador += 1
     else: parserError(prox_simb)
-
-    #posicoesCadaJogador = len(posicoes)
-    #print("O jogador pode atuar em",posicoesCadaJogador,"posicoes")
 
 
 nrJogadores = 0
 posicoesPreenchidas = 0
 posicoesCadaJogador = 0
-jogadoresPorPosicao = 0
+gks = 0
+cens = 0
+lats = 0
+meds = 0
+exts = 0
+pls = 0
 
 #linha = input("Introduza uma frase válida: ")
 # Teste do tokenizer
@@ -261,3 +260,9 @@ rec_Parser(programa)
 
 print("Este plantel é constituído por", nrJogadores, "jogadores")
 print("Este plantel tem jogadores que podem atuar em", posicoesPreenchidas, "posicoes diferentes")
+print("Existem",gks,"guarda-redes neste plantel")
+print("Existem",lats,"laterais neste plantel")
+print("Existem",cens,"centrais neste plantel")
+print("Existem",meds,"medios neste plantel")
+print("Existem",exts,"extremos neste plantel")
+print("Existem",pls,"pontas-de-lança neste plantel")
