@@ -9,7 +9,6 @@
 #     -If you have several rules X→Y,X→Z, then Z must not be non-false (i.e. must be able to return false)
 ###
 
-from ctypes.wintypes import PINT
 
 
 producoes = {
@@ -37,26 +36,11 @@ NT = ['Plantel', 'Jogadores', 'Cont1', 'Jogador', 'Nome', 'Posicoes', 'Cont2', '
 # Símbolos terminais
 T = ['PA', 'PF', 'VIRG', 'Nome:', 'Posicoes:', 'id', 'GK', 'LAT', 'CEN', 'MED', 'EXT', 'PL']
 
-# Acho que está bem, falta verificar quando o proximo simbolo não é NT voltar a fazer o ciclo mas agora com p[1]
-# E falta fazer para as produções que são vazias
 
-# Cálculo de LookAheads
-lookAheads = {}
-for n in NT:
-    lookAheads[n] = []
-    for p in producoes[n]:
-        encontrado = False
-        i = 0
-        while not encontrado and i < len(p):
-            if p[i] in T:
-                if p[i] not in NT:
-                    lookAheads[n].append(p[i])
-                    encontrado = True
-            #else:
-                #print(p[i])
-            i = i + 1
 
-#print(lookAheads)
+# Verifica se um simbolo nao terminal é nullable
+def isNullable(nt):
+    return [] in producoes[nt]
 
 
 
@@ -198,17 +182,56 @@ def print_follows():
 
 
 
+# Cálculo de LookAheads
+def lookAhead(le,ld):
+    fi = []
+    for p in ld:
+        fi.append(first(p))
+    fo = follow(le)
+
+    if isNullable(le):
+        fi.remove([])
+        return fi + [fo]
+    else:
+        return fi
+
+# Cálculo de todos os lookaheads
+lookAheads = {}
+def calc_lookaheads():
+    for key, value in producoes.items():
+        lookAheads[key] = lookAhead(key,value)
+
+# Print lookaheads
+def print_lookaheads():
+    print()
+    print("Calculated Lookaheads:")
+    print("--------------------------------------------------------------------------")
+    for key,value in lookAheads.items():
+        print(key,value)
+    print("--------------------------------------------------------------------------")
+    print()
+
+
+
+# Verifica se a gramatica obedece ás regras dos lookaheads numa gramatica ll(1)
+def verify_lookAheads():
+    res = True
+    for value in lookAheads.values():
+        if len(value) > 1:
+            aux = []
+            for i in value:
+                aux = aux + i
+            if len(aux) != len(set(aux)):
+                res = False
+    return res
+
+
+
 calc_firsts()
 calc_follows()
+calc_lookaheads()
 
 print_firsts()
 print_follows()
-
-
-#######
-#   NOTA:
-#       agr acho que é mais simples calcular os lookaheads
-#       temos os first e follows
-#       se uma producao nao for anulavel lookahead = first
-#       se uma producao     for anulavel lookahead = first + follow(lado esquerdo)
-#######
+print_lookaheads()
+print("Obedece ás regras de lookaheads: ", verify_lookAheads())
