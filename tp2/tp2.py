@@ -245,18 +245,19 @@ posicoesPreenchidas = 0
 posicoesCadaJogador = 0
 jogadoresPorPosicao = 0
 
-linha = input("Introduza uma frase válida: ")
+#linha = input("Introduza uma frase válida: ")
 # Teste do tokenizer
 # lexer.input(linha)
 # for tok in lexer:
 #     print(tok)
-rec_Parser(linha)
-print("Este plantel é constituído por", nrJogadores, "jogadores")
-print("Este plantel tem jogadores que podem atuar em", posicoesPreenchidas, "posicoes diferentes")
+#rec_Parser(linha)
 
 
-#import sys
-#programa = sys.stdin.read()
-#rec_Parser(programa)
+import sys
+programa = sys.stdin.read()
+rec_Parser(programa)
 
 ## usar comando: cat teste.txt | python3 tp2.py
+
+print("Este plantel é constituído por", nrJogadores, "jogadores")
+print("Este plantel tem jogadores que podem atuar em", posicoesPreenchidas, "posicoes diferentes")
