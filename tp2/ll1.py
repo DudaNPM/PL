@@ -24,7 +24,7 @@
 
 # Produções da gramática
 
-# producoes sem recursividade à esquerda
+# SEM RECURSIVIDADE À ESQUERDA
 # producoes = {
 #     #Plantel   : '[' Jogadores ']'
 #     #Jogadores : Jogador Cont1
@@ -44,7 +44,11 @@
 #     "Posicao"  : [['GK'],['LAT'],['CEN'],['MED'],['EXT'],['PL']]
 # }
 
-# producoes com recursividade à esquerda
+# Símbolos não terminais
+# NT = ['Plantel', 'Jogadores', 'Cont1', 'Jogador', 'Nome', 'Posicoes', 'Cont2', 'Posicao']
+
+
+# COM RECURSIVIDADE À ESQUERDA
 producoes = {
     #Plantel   : '[' Jogadores ']'
     #Jogadores : Jogadores ',' Jogador | Jogador
@@ -61,7 +65,7 @@ producoes = {
 }
 
 # Símbolos não terminais
-NT = ['Plantel', 'Jogadores', 'Cont1', 'Jogador', 'Nome', 'Posicoes', 'Cont2', 'Posicao']
+NT = ['Plantel', 'Jogadores', 'Jogador', 'Nome', 'Posicoes', 'Posicao']
 
 # Símbolos terminais
 T = ['PA', 'PF', 'VIRG', 'Nome:', 'Posicoes:', 'id', 'GK', 'LAT', 'CEN', 'MED', 'EXT', 'PL']
@@ -104,18 +108,11 @@ def solve_LeftRecursion():
         # criação das novas regras (por em evidência)
         if len(alphaRules) != 0:
             
-            ## geração de um novo simbolo
-            
-            # este seria o caso geral, para funcionar com qualquer gramatica
-            # le_aux = le + "'"
-            # while (le_aux in producoes.keys()) or (le_aux in store.keys()):
-            #     le_aux += "'"
-            
-            # como depois queremos reconhecer a gramatica forcamos o nome das novas produções
-            if le == 'Jogadores':
-                le_aux = 'Cont1'
-            else:
-                le_aux = 'Cont2'
+            # geração de um novo simbolo nao terminal
+            le_aux = le + "'"
+            while (le_aux in producoes.keys()) or (le_aux in store.keys()):
+                le_aux += "'"
+            NT.append(le_aux)
 
             # beta rule, sem recursividade
             for b in range(0, len(betaRules)):
