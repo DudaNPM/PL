@@ -1,5 +1,3 @@
-from traceback import print_tb
-#from turtle import pos
 import ply.lex as lex
 
 tokens = ['PA','PF','VIRG','ID','GK','LAT','CEN','MED','EXT','PL','NOME','POSICOES']
@@ -62,6 +60,7 @@ lexer = lex.lex()
 
 #####################################################################################################################
 
+
 # G = {T,N,P,S}
 # T = {'[', ']', ',', 'Nome:', 'Posicoes:', 'id', 'GK', 'LAT', 'CEN', 'MED', 'EXT', 'PL'}
 # N = {Plantel, Jogadores, Jogador, Cont1, Nome, Posicoes, Posicao, Cont2}
@@ -69,6 +68,25 @@ lexer = lex.lex()
 # P = {p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16}
 
 
+# COM RECURSIVIDADE À ESQUERDA
+# def p_grammar(p):
+#   Z         : Plantel '$'
+#   Plantel   : '[' Jogadores ']'
+#   Jogadores : Jogadores ',' Jogador
+#             | Jogador
+#   Jogador   : "Nome: " Nome "Posicoes: " '[' Posicoes ']'
+#   Nome      : id
+#   Posicoes  : Posicoes ',' Posicao
+#             | Posicao
+#   Posicao   : GK
+#             | LAT
+#             | CEN
+#             | MED
+#             | EXT
+#             | PL
+
+
+# SEM RECURSIVIDADE À ESQUERDA
 # def p_grammar(p):                                                 FIRST                           FOLLOW          LOOKAHEADS
 #  p1    Z         : Plantel '$'                                    {'['}                           {}              {'['}
 #  p2    Plantel   : '[' Jogadores ']'                              {'['}                           {$}             {'['}
@@ -92,15 +110,15 @@ lexer = lex.lex()
 
 #    estado     '['     "Nome: "     ','     ']'     id     GK     LAT     CEN     MED     EXT     PL    "Posicoes:"
 # --------------------------------------------------------------------------------------------------------------------
-#         Z      p1       --         --      --      --     --     --      --      --      --      -- 
-#   Plantel      p2       --         --      --      --     --     --      --      --      --      -- 
-# Jogadores      --       p3         --      --      --     --     --      --      --      --      -- 
-#     Cont1      --       --         p4      p5      --     --     --      --      --      --      -- 
-#   Jogador      --       p6         --      --      --     --     --      --      --      --      -- 
-#      Nome      --       --         --      --      p7     --     --      --      --      --      -- 
-#  Posicoes      --       --         --      --      --     p8     p8      p8      p8      p8      p8 
-#     Cont2      --       --         p9      p10     --     --     --      --      --      --      -- 
-#   Posicao      --       --         --      --      --     p11    p12     p13     p14     p15     p16
+#         Z      p1       --         --      --      --     --     --      --      --      --      --         --
+#   Plantel      p2       --         --      --      --     --     --      --      --      --      --         --
+# Jogadores      --       p3         --      --      --     --     --      --      --      --      --         --
+#     Cont1      --       --         p4      p5      --     --     --      --      --      --      --         --
+#   Jogador      --       p6         --      --      --     --     --      --      --      --      --         --
+#      Nome      --       --         --      --      p7     --     --      --      --      --      --         --
+#  Posicoes      --       --         --      --      --     p8     p8      p8      p8      p8      p8         --
+#     Cont2      --       --         p9      p10     --     --     --      --      --      --      --         --
+#   Posicao      --       --         --      --      --     p11    p12     p13     p14     p15     p16        --
 # --------------------------------------------------------------------------------------------------------------------
 
 
@@ -108,17 +126,16 @@ prox_simb = ('Erro', '', 0, 0)
 
 def parserError(simb):
     print("Erro Sintático: ", simb)
+    print()
+    raise Exception("Erro no reconhecimento da gramática...\n")
 
 def rec_term(simb):
     global prox_simb
     print("term:",prox_simb.value)
     if prox_simb.type == simb:
-        v_term = prox_simb.value
         prox_simb = lexer.token()
     else:
         parserError(prox_simb)
-        v_term = 'Erro Léxico'
-    return v_term
 
 def rec_Parser(data):
     global prox_simb
@@ -138,12 +155,13 @@ def rec_Jogadores():
 
 def rec_Cont1():
     global prox_simb
-    if prox_simb.type == 'VIRG':
-        rec_term('VIRG')
-        rec_Jogador()
-        rec_Cont1()
-    elif prox_simb.type == 'PF':
-        pass
+    if prox_simb:
+        if prox_simb.type == 'VIRG':
+            rec_term('VIRG')
+            rec_Jogador()
+            rec_Cont1()
+        elif prox_simb.type == 'PF':
+            pass
     else:
         parserError(prox_simb)
 
@@ -231,7 +249,8 @@ def rec_Posicao():
             posicoesPreenchidas += 1
         pls += 1
         posicoesCadaJogador += 1
-    else: parserError(prox_simb)
+    else:
+        parserError(prox_simb)
 
 
 nrJogadores = 0
@@ -244,13 +263,6 @@ meds = 0
 exts = 0
 pls = 0
 
-#linha = input("Introduza uma frase válida: ")
-# Teste do tokenizer
-# lexer.input(linha)
-# for tok in lexer:
-#     print(tok)
-#rec_Parser(linha)
-
 
 import sys
 programa = sys.stdin.read()
@@ -258,6 +270,7 @@ rec_Parser(programa)
 
 ## usar comando: cat teste.txt | python3 tp2.py
 
+print("\n\n|---------------------------------------------PLANTEL INFO---------------------------------------------|\n")
 print("Este plantel é constituído por", nrJogadores, "jogadores")
 print("Este plantel tem jogadores que podem atuar em", posicoesPreenchidas, "posicoes diferentes")
 print("Existem",gks,"guarda-redes neste plantel")
@@ -265,4 +278,4 @@ print("Existem",lats,"laterais neste plantel")
 print("Existem",cens,"centrais neste plantel")
 print("Existem",meds,"medios neste plantel")
 print("Existem",exts,"extremos neste plantel")
-print("Existem",pls,"pontas-de-lança neste plantel")
+print("Existem",pls,"pontas-de-lança neste plantel\n")

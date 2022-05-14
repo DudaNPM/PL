@@ -5,29 +5,59 @@
 # 
 #     -If you have several rules X→Y,X→Z, then First(Y) ∩ First(Z) = ∅
 #     -If you have several rules X→Y,X→Z, and First(Z) contains ϵ, then First(Y) ∩ Follow(Z) = ∅
-#     -No left recursions: X→X…
 #     -If you have several rules X→Y,X→Z, then Z must not be non-false (i.e. must be able to return false)
+#
+# Conflits:
+#     
+#     -Left recursion
+#     -Common prefix
+#
+# Solve left recursion:
+#   
+#     A → A α    -->>     A  → β A’
+#     A → β      -->>     A’ → α A’
+#                -->>     A’ → ε
+#
 ###
 
 
 
+# Produções da gramática
+
+# producoes sem recursividade à esquerda
+# producoes = {
+#     #Plantel   : '[' Jogadores ']'
+#     #Jogadores : Jogador Cont1
+#     #Cont1     : ',' Jogador Cont1 | ϵ
+#     #Jogador   : "Nome: " Nome "Posicoes: " '[' Posicoes ']'
+#     #Nome      : id
+#     #Posicoes  : Posicao Cont2
+#     #Cont2     : ',' Posicao Cont2 | ϵ
+#     #Posicao   : GK | LAT | CEN | MED | EXT | EXT | PL
+#     "Plantel"  : [['PA', 'Jogadores', 'PF']],
+#     "Jogadores": [['Jogador', 'Cont1']],
+#     "Cont1"    : [['VIRG', 'Jogador', 'Cont1'], []],
+#     "Jogador"  : [['Nome:', 'Nome', 'Posicoes:', 'PA', 'Posicoes', 'PF']],
+#     "Nome"     : [['id']],
+#     "Posicoes" : [['Posicao', 'Cont2']],
+#     "Cont2"    : [['VIRG', 'Posicao', 'Cont2'], []],
+#     "Posicao"  : [['GK'],['LAT'],['CEN'],['MED'],['EXT'],['PL']]
+# }
+
+# producoes com recursividade à esquerda
 producoes = {
     #Plantel   : '[' Jogadores ']'
-    "Plantel": [['PA', 'Jogadores', 'PF']],
-    #Jogadores : Jogador Cont1
-    "Jogadores": [['Jogador', 'Cont1']],
-    #Cont1     : ',' Jogador Cont1 | ϵ
-    "Cont1": [['VIRG', 'Jogador', 'Cont1'], []],
+    #Jogadores : Jogadores ',' Jogador | Jogador
     #Jogador   : "Nome: " Nome "Posicoes: " '[' Posicoes ']'
-    "Jogador": [['Nome:', 'Nome', 'Posicoes:', 'PA', 'Posicoes', 'PF']],
     #Nome      : id
-    "Nome": [['id']],
-    #Posicoes  : Posicao Cont2
-    "Posicoes": [['Posicao', 'Cont2']],
-    #Cont2     : ',' Posicao Cont2 | ϵ
-    "Cont2": [['VIRG', 'Posicao', 'Cont2'], []],
+    #Posicoes  : Posicoes ',' Posicao | Posicao
     #Posicao   : GK | LAT | CEN | MED | EXT | EXT | PL
-    "Posicao": [['GK'],['LAT'],['CEN'],['MED'],['EXT'],['PL']]
+    "Plantel"  : [['PA', 'Jogadores', 'PF']],
+    "Jogadores": [['Jogadores', 'VIRG', 'Jogador'], ['Jogador']],
+    "Jogador"  : [['Nome:', 'Nome', 'Posicoes:', 'PA', 'Posicoes', 'PF']],
+    "Nome"     : [['id']],
+    "Posicoes" : [['Posicoes', 'VIRG', 'Posicao'], ['Posicao']],
+    "Posicao"  : [['GK'],['LAT'],['CEN'],['MED'],['EXT'],['PL']]
 }
 
 # Símbolos não terminais
@@ -35,6 +65,72 @@ NT = ['Plantel', 'Jogadores', 'Cont1', 'Jogador', 'Nome', 'Posicoes', 'Cont2', '
 
 # Símbolos terminais
 T = ['PA', 'PF', 'VIRG', 'Nome:', 'Posicoes:', 'id', 'GK', 'LAT', 'CEN', 'MED', 'EXT', 'PL']
+
+# Conjuntos
+firsts = {}
+follows = {}
+lookAheads = {}
+
+
+
+# Verifica se a gramática não contém recursividade à esquerda
+def verify_LeftRecursion():
+    res = True
+    for key,value in producoes.items():
+        for p in value:
+            if len(p) > 0:
+                if key == p[0]:
+                    res = False
+    return res
+
+
+
+# Resolve o conflito de recursividade à esquerda
+def solve_LeftRecursion():
+    store = {}
+
+    for le in producoes:
+        alphaRules = [] # regras com recursividade
+        betaRules = [] # regras sem recursividade
+        
+        # todos os lados direitos de um lado esquerdo com o mesmo nome
+        allld = producoes[le]
+        for ld in allld:
+            if ld[0] == le: # existe recursividade
+                alphaRules.append(ld[1:])
+            else:
+                betaRules.append(ld)
+        
+        # criação das novas regras (por em evidência)
+        if len(alphaRules) != 0:
+            
+            ## geração de um novo simbolo
+            
+            # este seria o caso geral, para funcionar com qualquer gramatica
+            # le_aux = le + "'"
+            # while (le_aux in producoes.keys()) or (le_aux in store.keys()):
+            #     le_aux += "'"
+            
+            # como depois queremos reconhecer a gramatica forcamos o nome das novas produções
+            if le == 'Jogadores':
+                le_aux = 'Cont1'
+            else:
+                le_aux = 'Cont2'
+
+            # beta rule, sem recursividade
+            for b in range(0, len(betaRules)):
+                betaRules[b].append(le_aux)
+            producoes[le] = betaRules
+            
+            # alpha rule, com recursividade
+            for a in range(0, len(alphaRules)):
+                alphaRules[a].append(le_aux)
+            alphaRules.append([])
+            store[le_aux] = alphaRules
+    
+    # substitui novas regras
+    for left in store:
+        producoes[left] = store[left]
 
 
 
@@ -75,7 +171,6 @@ def first(prod):
             pass
 
 # Cálculo de todos os firsts
-firsts = {}
 def calc_firsts():
     for key, value in producoes.items():
         for p in value:
@@ -165,7 +260,6 @@ def follow(nt):
     return list(current)
 
 # Cálculo de todos os follows
-follows = {}
 def calc_follows():
     for nt in NT:
         follows[nt] = follow(nt)
@@ -196,7 +290,6 @@ def lookAhead(le,ld):
         return fi
 
 # Cálculo de todos os lookaheads
-lookAheads = {}
 def calc_lookaheads():
     for key, value in producoes.items():
         lookAheads[key] = lookAhead(key,value)
@@ -213,7 +306,7 @@ def print_lookaheads():
 
 
 
-# Verifica se a gramatica obedece ás regras dos lookaheads numa gramatica ll(1)
+# Verifica se a gramatica obedece às regras dos lookaheads numa gramatica ll(1)
 def verify_lookAheads():
     res = True
     for value in lookAheads.values():
@@ -227,11 +320,27 @@ def verify_lookAheads():
 
 
 
+recursividade = verify_LeftRecursion()
+
+if not recursividade:
+    solve_LeftRecursion()
+    recursividade = verify_LeftRecursion()
+
+    if recursividade:
+        print('\nRecursividade à esquerda foi corrigida !!!')
+    else:
+        raise Exception('Recursividade à esquerda não foi corrigida corretamente...')
+
+print("\nRules:")
+print("--------------------------------------------------------------------------")
+
 calc_firsts()
 calc_follows()
 calc_lookaheads()
 
+print("Obedece às regras de lookaheads:", verify_lookAheads())
+print("--------------------------------------------------------------------------\n")
+
 print_firsts()
 print_follows()
 print_lookaheads()
-print("Obedece ás regras de lookaheads: ", verify_lookAheads())
