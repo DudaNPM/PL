@@ -1,12 +1,15 @@
 ###
 # LL(1) GRAMMAR
 # 
-# The constraints are:
+# The constraint is:
 # 
-#     -If you have several rules X→Y,X→Z, then First(Y) ∩ First(Z) = ∅
-#     -If you have several rules X→Y,X→Z, and First(Z) contains ϵ, then First(Y) ∩ Follow(Z) = ∅
-#     -If you have several rules X→Y,X→Z, then Z must not be non-false (i.e. must be able to return false)
+#     ∀ (A→α1,A→α2) : lookahead(A → α1) ⋂ lookahead(A → α2) = ∅
 #
+# Lookahead:
+#                                      { ∅         , α /⇒∗ ε    se nao for anulavel
+#     lookahead (A → α) = First(α)  ⋃ {  
+#                                      { Follow(A) , α  ⇒∗ ε    se for anulavel
+# 
 # Conflits:
 #     
 #     -Left recursion
