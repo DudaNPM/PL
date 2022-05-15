@@ -1,0 +1,3 @@
+[Nome: Sebastian Posicoes: [CEN,], Nome: Matheus Posicoes: [CEN], Nome: Nuno Posicoes: [LAT],
+Nome: Luis Posicoes: [CEN], Nome: Goncalo Posicoes: [CEN], Nome: Pedro Posicoes: [LAT]]
+

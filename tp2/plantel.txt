@@ -1,0 +1,13 @@
+[Nome: Antonio Posicoes: [GK], Nome: Pedro Posicoes: [LAT], Nome: Goncalo Posicoes: [CEN],
+ Nome: Sebastian Posicoes: [CEN], Nome: Matheus Posicoes: [CEN], Nome: Nuno Posicoes: [LAT,EXT],
+ Nome: Matheus Posicoes: [MED], Nome: Joao Posicoes: [MED,CEN], Nome: Pedro Posicoes: [PL,EXT,MED],
+ Nome: Pablo Posicoes: [PL,EXT], Nome: Marcus Posicoes: [EXT,PL], Nome: Paulo Posicoes: [PL,EXT],
+ Nome: Luis Posicoes: [CEN], Nome: Ruben Posicoes: [LAT], Nome: Ricardo Posicoes: [LAT,CEN],
+ Nome: Goncalo Posicoes: [LAT], Nome: Manu Posicoes: [MED], Nome: Daniel Posicoes: [MED],
+ Nome: Bruno Posicoes: [MED,EXT], Nome: Rodrigo Posicoes: [PL], Nome: Dario Posicoes: [MED]]
+
+
+
+
+
+
