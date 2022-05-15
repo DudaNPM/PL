@@ -2,7 +2,7 @@
  Nome: Duarte Posicoes: [PL,EXT], Nome: Lucas Posicoes: [MED,CEN,PL], Nome: Manuel Posicoes: [GK],
  Nome: Agostinho Posicoes: [EXT,PL], Nome: Alves Posicoes: [CEN], Nome: Costa Posicoes: [MED,EXT,CEN],
  Nome: Marques Posicoes: [GK], Nome: Paulinho Posicoes: [MED,LAT], Nome: Pires Posicoes: [LAT,EXT],
- Nome: Ricardo Posicoes: [MED,EXT], Nome: Miguel Posicoes: [EXT,PL], Nome: Filipe Posicoes: [PL], 
- Nome: Duarte Posicoes: [PL,EXT], Nome: Lucas Posicoes: [MED,CEN,PL], Nome: Manuel Posicoes: [GK], 
- Nome: Agostinho Posicoes: [EXT,PL], Nome: Alves Posicoes: [CEN], Nome: Costa Posicoes: [MED,EXT,CEN], 
- Nome: Marques Posicoes: [GK], Nome: Paulinho Posicoes: [MED,LAT], Nome: Pires Posicoes: [LAT,EXT]]
+ Nome: Abreu Posicoes: [MED,EXT], Nome: Zeus Posicoes: [EXT,PL], Nome: Armando Posicoes: [PL],
+ Nome: Pedro Posicoes: [PL,EXT], Nome: Diogo Posicoes: [MED,CEN,PL], Nome: Serginho Posicoes: [GK], 
+ Nome: Jesus Posicoes: [EXT,PL], Nome: Moreira Posicoes: [CEN], Nome: Carmo Posicoes: [MED,EXT,CEN],
+ Nome: Lipo Posicoes: [GK], Nome: Zeca Posicoes: [MED,LAT], Nome: Bruno Posicoes: [LAT,EXT]]
